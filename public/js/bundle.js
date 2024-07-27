@@ -12553,7 +12553,7 @@ var bookTour = exports.bookTour = /*#__PURE__*/function () {
           }
           // 1. Get Checkout session
           _context.next = 3;
-          return (0, _axios.default)("http://127.0.0.1:3000/api/v1/bookings/checkout-session/".concat(tourId));
+          return (0, _axios.default)("/api/v1/bookings/checkout-session/".concat(tourId));
         case 3:
           session = _context.sent;
           console.log(session);
@@ -12821,7 +12821,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62301" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56772" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
