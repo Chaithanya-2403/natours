@@ -18,10 +18,26 @@ exports.getOverView = catchAsync(async (req, res, next) => {
 
 exports.getTour = catchAsync(async (req, res, next) => {
   //1. get the data, for the requested tour (including review & guides)
+  //console.log('User Data: ', res.locals.user);
   const tour = await Tour.findOne({ slug: req.params.slug }).populate({
     path: 'reviews',
     fields: 'review rating user',
   });
+  // const specificTourId = tour._id;
+  // const specificUserId = res.locals.user._id;
+  const specificTourId = '5c88fa8cf4afda39709c2951';
+  const specificUserId = '66a35ac0a729cd2fec15c6f4';
+  console.log(`Comparing Tour ID: ${specificTourId} with ${tour._id}`);
+  console.log(`Comparing User ID: ${specificUserId} with ${res.locals.user._id}`);
+  const tourUserIds = [];
+  const bookedTour = await Booking.findOne({ tour: tour._id, user: res.locals.user._id });
+  console.log('Tour Length: ', bookedTour);
+  let is_booked = false;
+  if (bookedTour != null) {
+    is_booked = true;
+  }
+  console.log(is_booked);
+
   if (!tour) {
     return next(new AppError('There is not tour with that name', 404));
   }
@@ -32,6 +48,7 @@ exports.getTour = catchAsync(async (req, res, next) => {
   res.status(200).render('tour', {
     title: `${tour.name} Tour`,
     tour,
+    is_booked,
   });
 });
 

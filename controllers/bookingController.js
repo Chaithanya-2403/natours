@@ -66,3 +66,8 @@ exports.getAllBookings = factory.getAll(Booking);
 exports.updateBooking = factory.updateOne(Booking);
 exports.deleteBooking = factory.deleteOne(Booking);
 exports.getBooking = factory.getOne(Booking);
+
+exports.checkIsBooked = catchAsync(async (req, res, next) => {
+  console.log(res.user);
+  console.log(res.tour);
+});

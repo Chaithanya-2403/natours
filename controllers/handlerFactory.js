@@ -50,6 +50,7 @@ exports.getOne = (model, popOptions) =>
     let query = model.findById(req.params.id);
     if (popOptions) query = query.populate(popOptions);
     const doc = await query;
+    console.log('Item Details: ', doc);
     //const tour = await Tour.findById(req.params.id).populate('reviews');
     if (!doc) {
       return next(new AppError('No document found with that id', 404));
