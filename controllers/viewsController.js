@@ -35,6 +35,12 @@ exports.getTour = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.signup = (req, res) => {
+  res.status(200).render('signup', {
+    title: 'Create account',
+  });
+};
+
 exports.login = (req, res) => {
   res.status(200).render('login', {
     title: 'Login into your account',
