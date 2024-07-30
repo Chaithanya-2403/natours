@@ -6,21 +6,21 @@ const stripe = Stripe(
 
 export const bookTour = async (tourId) => {
   try {
+    // 1. Get Checkout session
+    const session = await axios(`/api/v1/bookings/checkout-session/${tourId}`);
+    console.log(session);
+    console.log('Session Id: ', session.data.session.id);
+
+    // 2. Create Checkout form + charge credit card
+    await stripe.redirectToCheckout({
+      sessionId: session.data.session.id,
+    });
+    showAlert('success', 'successfully completed your tour booking');
+    window.setTimeout(() => {
+      location.assign('/my-tours');
+    }, 1000);
   } catch (err) {
     console.log(err.message);
     showAlert('error', err);
   }
-  // 1. Get Checkout session
-  const session = await axios(`/api/v1/bookings/checkout-session/${tourId}`);
-  console.log(session);
-  console.log('Session Id: ', session.data.session.id);
-
-  // 2. Create Checkout form + charge credit card
-  await stripe.redirectToCheckout({
-    sessionId: session.data.session.id,
-  });
-  showAlert('success', 'successfully completed your tour booking');
-  window.setTimeout(() => {
-    location.assign('/my-tours');
-  }, 1000);
 };

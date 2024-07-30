@@ -12,7 +12,12 @@ router.use(authController.protect);
 router
   .route('/')
   .get(reviewController.getAllReviews)
-  .post(authController.restrictTo('user'), reviewController.setCreateUserIds, reviewController.createReview);
+  .post(
+    authController.restrictTo('user'),
+    reviewController.setCreateUserIds,
+    reviewController.checkIfBooked,
+    reviewController.createReview,
+  );
 //router.route('/:id').get(userController.getUserById).patch(userController.updateUser).delete(userController.deleteUser);
 
 router

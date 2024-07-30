@@ -76,17 +76,39 @@ block content
     .reviews
       each review in tour.reviews
         +reviewCard(review)
-  if !is_booked
-    section.section-cta
-      .cta
-        .cta__img.cta__img--logo
-          img(src='/img/logo-white.png', alt='Natours logo')
-        img.cta__img.cta__img--1(src=`/img/tours/${tour.images[1]}`, alt='Tour Picture')
-        img.cta__img.cta__img--2(src=`/img/tours/${tour.images[2]}`, alt='Tour Picture')
-        .cta__content
-          h2.heading-secondary What are you waiting for?
-          p.cta__text 10 days. 1 adventure. Infinite memories. Make it yours today!
-          if user
-            button.btn.btn--green.span-all-rows#book-tour(data-tour-id=`${tour.id}`) Book tour now!
-          else
-            a.btn.btn--green.span-all-rows(href='/login') Login to book tour
+  // -if !is_booked
+  section.section-cta
+    .cta
+      .cta__img.cta__img--logo
+        img(src='/img/logo-white.png', alt='Natours logo')
+      img.cta__img.cta__img--1(src=`/img/tours/${tour.images[1]}`, alt='Tour Picture')
+      img.cta__img.cta__img--2(src=`/img/tours/${tour.images[2]}`, alt='Tour Picture')
+      .cta__content
+        h2.heading-secondary What are you waiting for?
+        p.cta__text 10 days. 1 adventure. Infinite memories. Make it yours today!
+        if user
+          if(user.role === 'admin')
+            button.btn.btn--red.span-all-rows(disabled) Booking is only for users!
+          else if(user.role !== 'admin')
+            if(user && !is_booked)
+              button.btn.btn--green.span-all-rows#book-tour(data-tour-id=`${tour.id}`) Book tour now!
+            else
+              button.btn.btn--red.span-all-rows(disabled) This tour already booked..
+        else
+          a.btn.btn--green.span-all-rows(href='/login') Login to book tour
+  if user.role !== 'admin'
+    if !is_reviewed
+      section.add-review
+        .login-form
+          h2.heading-secondary.ma-bt-lg Leave a review
+          form.review--form(data-ids=`${JSON.stringify({ user: user.id, tour: tour.id })}`)
+            .form_group
+              label.form__label(for='review') Review
+              input#review.form__input(type='text', required)
+            .form_group
+              label.form__label(for='rating') Rating (1-5)
+              input#rating.form__input(type='number', min='1', max='5', required)
+            .form_group
+              button.btn.btn--green Submit review
+
+

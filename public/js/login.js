@@ -19,7 +19,6 @@ export const signup = async (name, email, password, passwordConfirm) => {
         location.assign('/login');
       }, 1000);
     }
-    //console.log(res);
   } catch (err) {
     showAlert('error', err.response.data.message);
   }

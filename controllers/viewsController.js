@@ -3,6 +3,7 @@ const catchAsync = require('../utils/catchAsyn');
 const AppError = require('../utils/appError');
 const User = require('../models/userModel');
 const Booking = require('../models/bookingModel');
+const Review = require('../models/reviewModel');
 
 exports.getOverView = catchAsync(async (req, res, next) => {
   // 1. get route data from collection
@@ -23,20 +24,26 @@ exports.getTour = catchAsync(async (req, res, next) => {
     path: 'reviews',
     fields: 'review rating user',
   });
-  // const specificTourId = tour._id;
-  // const specificUserId = res.locals.user._id;
-  const specificTourId = '5c88fa8cf4afda39709c2951';
-  const specificUserId = '66a35ac0a729cd2fec15c6f4';
-  console.log(`Comparing Tour ID: ${specificTourId} with ${tour._id}`);
-  console.log(`Comparing User ID: ${specificUserId} with ${res.locals.user._id}`);
-  const tourUserIds = [];
+  const specificTourId = tour._id;
+  const specificUserId = res.locals.user._id;
+  // Checking login user booked this tour or not
   const bookedTour = await Booking.findOne({ tour: tour._id, user: res.locals.user._id });
-  console.log('Tour Length: ', bookedTour);
+  //console.log('Tour Data: ', bookedTour);
   let is_booked = false;
   if (bookedTour != null) {
     is_booked = true;
   }
-  console.log(is_booked);
+  console.log('Is booked: ', is_booked);
+
+  // Checking login user given review or not for this tour
+
+  const review = await Review.findOne({ tour: tour._id, user: res.locals.user._id });
+  console.log('Review Data: ', review);
+  let is_reviewed = false;
+  if (review != null) {
+    is_reviewed = true;
+  }
+  console.log('Is reviewed: ', is_reviewed);
 
   if (!tour) {
     return next(new AppError('There is not tour with that name', 404));
@@ -49,6 +56,7 @@ exports.getTour = catchAsync(async (req, res, next) => {
     title: `${tour.name} Tour`,
     tour,
     is_booked,
+    is_reviewed,
   });
 });
 
